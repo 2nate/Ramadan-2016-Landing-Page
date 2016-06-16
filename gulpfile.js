@@ -9,6 +9,7 @@ var	  gulp				= require('gulp')
 	, path				= require('path')
 	, fs				= require('fs')
 	, del				= require('del')
+	, imagemin			= require('gulp-imagemin')
 ;
 
 var vendorCssSrcs = [
@@ -23,6 +24,7 @@ var vendorIeJsSrcs = [
 var   nunjucksTemplateSource		= 'src/views/'
 	, nunjucksViewSource			= 'src/views/**/*.+(html|nunjucks)'
 	, nunjucksDataSource			= 'src/data/**/*'
+	, imagesSource					= 'src/images/*'
 	, nunjucksRenderDestination		= 'dist/render/'
 	, vendorsResourceOutput			= 'dist/assets/vendors/'
 ;
@@ -47,6 +49,7 @@ gulp.task('default', ['watch']);
 gulp.task('watch', function() {
 	gulp.watch(vendorCssSrcs.concat(vendorJsSrcs.concat(vendorIeJsSrcs)), ['vendor-compiler']);
 	gulp.watch([nunjucksViewSource, nunjucksTemplateSource+'**/*', nunjucksDataSource], ['nunjucks']);
+	gulp.watch([imagesSource], ['imagemin']);
 });
 
 gulp.task('vendor-compiler', function() {
@@ -84,3 +87,9 @@ gulp.task('nunjucks', ['clean-dist-render'], function() {
 gulp.task('clean-dist-render', function() {
 	return del(nunjucksRenderDestination+'**/*');
 });
+
+gulp.task('imagemin', () =>
+	gulp.src(imagesSource)
+		.pipe(imagemin())
+		.pipe(gulp.dest('dist/images'))
+);

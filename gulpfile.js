@@ -12,7 +12,7 @@ var	  gulp				= require('gulp')
 ;
 
 var vendorCssSrcs = [
-;
+];
 
 var vendorJsSrcs = [
 ];

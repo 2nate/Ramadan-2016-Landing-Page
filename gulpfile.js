@@ -16,13 +16,16 @@ var	  gulp				= require('gulp')
 var   nunjucksTemplateSource		= 'src/views/'
 	, nunjucksViewSource			= 'src/views/**/*.+(html|nunjucks)'
 	, nunjucksDataSource			= 'src/data/**/*'
-	, srcSassStyle					= srcResources+'/sass/main.scss'
 	, imagesSource					= 'src/images/*'
-	, nunjucksRenderDestination		= 'dist/render/'
-	, vendorsResourceOutput			= 'dist/assets/vendors/'
-	, sassResourceOutput			= 'dist/assets/css/'
-	, imagesDestination				= 'dist/images/'
 	, srcResources					= 'src/resources/'
+	, srcSassStyle					= srcResources+'/sass/main.scss'
+	, fontsSource					= srcResources+'/fonts/**/*'
+	, nunjucksRenderDestination		= 'dist/render/'
+	, imagesDestination				= 'dist/images/'
+	, assetsDestination				= 'dist/assets/'
+	, vendorsResourceOutput			= assetsDestination+'vendors/'
+	, sassResourceOutput			= assetsDestination+'css/'
+	, fontsOutput					= assetsDestination+'fonts/'
 ;
 
 var vendorSeparateCssSrcs = [
@@ -65,6 +68,7 @@ gulp.task('watch', function() {
 	gulp.watch([nunjucksViewSource, nunjucksTemplateSource+'**/*', nunjucksDataSource], ['nunjucks']);
 	gulp.watch([imagesSource], ['imagemin']);
 	gulp.watch([srcSassStyle], ['sass']);
+	gulp.watch([fontsSource], ['fonts']);
 });
 
 gulp.task('clean-dist-vendors', function() {
@@ -122,4 +126,9 @@ gulp.task('sass', function () {
 		  .pipe(minifyCss())
 		  .pipe(sourcemaps.write('./'))
 		  .pipe(gulp.dest(sassResourceOutput));
+});
+
+gulp.task('fonts', function () {
+	return gulp.src([fontsSource])
+		  .pipe(gulp.dest(fontsOutput));
 });

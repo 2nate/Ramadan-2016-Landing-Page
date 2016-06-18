@@ -12,15 +12,6 @@ var	  gulp				= require('gulp')
 	, imagemin			= require('gulp-imagemin')
 ;
 
-var vendorCssSrcs = [
-];
-
-var vendorJsSrcs = [
-];
-
-var vendorIeJsSrcs = [
-];
-
 var   nunjucksTemplateSource		= 'src/views/'
 	, nunjucksViewSource			= 'src/views/**/*.+(html|nunjucks)'
 	, nunjucksDataSource			= 'src/data/**/*'
@@ -28,7 +19,26 @@ var   nunjucksTemplateSource		= 'src/views/'
 	, nunjucksRenderDestination		= 'dist/render/'
 	, vendorsResourceOutput			= 'dist/assets/vendors/'
 	, imagesDestination				= 'dist/images/'
+	, srcResources					= 'src/resources/'
 ;
+
+var vendorSeparateCssSrcs = [
+	  srcResources+'css/ie8.css'
+	, srcResources+'css/ie9.css'
+];
+
+var vendorMixJsSrcs = [
+	  srcResources+'js/jquery.min.js'
+	, srcResources+'js/jquery.scrollex.min.js'
+	, srcResources+'js/jquery.scrolly.min.js'
+	, srcResources+'js/skel.min.js'
+	, srcResources+'js/util.js'
+];
+
+var vendorSeparateJsSrcs = [
+	  srcResources+'js/ie/respond.min.js'
+	, srcResources+'js/ie/html5shiv.js'
+];
 
 var distBasePath = __dirname.replace('\\', '/')+'/dist';
 
@@ -48,30 +58,32 @@ function getDataForFile(file) {
 gulp.task('default', ['watch']);
 
 gulp.task('watch', function() {
-	gulp.watch(vendorCssSrcs.concat(vendorJsSrcs.concat(vendorIeJsSrcs)), ['vendor-compiler']);
+	gulp.watch(vendorMixJsSrcs.concat(vendorSeparateJsSrcs.concat(vendorSeparateCssSrcs)), ['vendors']);
 	gulp.watch([nunjucksViewSource, nunjucksTemplateSource+'**/*', nunjucksDataSource], ['nunjucks']);
 	gulp.watch([imagesSource], ['imagemin']);
 });
 
-gulp.task('vendor-compiler', function() {
-	gulp.src(vendorCssSrcs)
+gulp.task('clean-dist-vendors', function() {
+	return del(vendorsResourceOutput+'**/*');
+});
+
+gulp.task('vendors', ['clean-dist-vendors'], function() {
+	gulp.src(vendorMixJsSrcs)
 		.pipe(sourcemaps.init())
-		.pipe(concat('vendors.css'))
+		.pipe(concat('scripts.js'))
+		.pipe(uglify())
+		.pipe(sourcemaps.write('./'))
+		.pipe(gulp.dest(vendorsResourceOutput));
+
+	gulp.src(vendorSeparateJsSrcs)
+		.pipe(sourcemaps.init())
+		.pipe(uglify())
+		.pipe(sourcemaps.write('./'))
+		.pipe(gulp.dest(vendorsResourceOutput));
+
+	gulp.src(vendorSeparateCssSrcs)
+		.pipe(sourcemaps.init())
 		.pipe(minifyCss())
-		.pipe(sourcemaps.write('./'))
-		.pipe(gulp.dest(vendorsResourceOutput));
-
-	gulp.src(vendorJsSrcs)
-		.pipe(sourcemaps.init())
-		.pipe(concat('vendors.js'))
-		.pipe(uglify())
-		.pipe(sourcemaps.write('./'))
-		.pipe(gulp.dest(vendorsResourceOutput));
-
-	gulp.src(vendorIeJsSrcs)
-		.pipe(sourcemaps.init())
-		.pipe(concat('ie-vendors.js'))
-		.pipe(uglify())
 		.pipe(sourcemaps.write('./'))
 		.pipe(gulp.dest(vendorsResourceOutput));
 });

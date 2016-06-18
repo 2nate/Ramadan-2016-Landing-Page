@@ -51,9 +51,10 @@ var vendorSeparateJsSrcs = [
 var distBasePath = __dirname.replace('\\', '/')+'/dist';
 
 function getDataForFile(file) {
-	var dataAddress = __dirname+'\\'+file.path
-					  .replace(__dirname+'\\src\\views\\models', 'src\\data')
-					  .replace('.+(html|nunjucks)', '.json');
+	var dataAddress = file.path
+					  .replace('src/views', 'src/data')
+					  .replace('.html', '.json')
+					  .replace('.nunjucks', '.json');
 
 	if (fs.existsSync(dataAddress)) {
 		delete require.cache[require.resolve(dataAddress)];

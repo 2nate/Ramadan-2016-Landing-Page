@@ -27,6 +27,7 @@ var   nunjucksTemplateSource		= 'src/views/'
 	, imagesSource					= 'src/images/*'
 	, nunjucksRenderDestination		= 'dist/render/'
 	, vendorsResourceOutput			= 'dist/assets/vendors/'
+	, imagesDestination				= 'dist/images/'
 ;
 
 var distBasePath = __dirname.replace('\\', '/')+'/dist';
@@ -88,8 +89,12 @@ gulp.task('clean-dist-render', function() {
 	return del(nunjucksRenderDestination+'**/*');
 });
 
-gulp.task('imagemin', () =>
-	gulp.src(imagesSource)
-		.pipe(imagemin())
-		.pipe(gulp.dest('dist/images'))
-);
+gulp.task('clean-dist-images', function() {
+	return del(imagesDestination+'**/*');
+});
+
+gulp.task('imagemin', ['clean-dist-images'], function() {
+	return gulp.src(imagesSource)
+		  .pipe(imagemin())
+		  .pipe(gulp.dest(imagesDestination))
+});

@@ -55,38 +55,38 @@ gulp.task('watch', function() {
 
 gulp.task('vendor-compiler', function() {
 	gulp.src(vendorCssSrcs)
-	.pipe(sourcemaps.init())
-	.pipe(concat('vendors.css'))
-	.pipe(minifyCss())
-	.pipe(sourcemaps.write('./'))
-	.pipe(gulp.dest(vendorsResourceOutput));
+		.pipe(sourcemaps.init())
+		.pipe(concat('vendors.css'))
+		.pipe(minifyCss())
+		.pipe(sourcemaps.write('./'))
+		.pipe(gulp.dest(vendorsResourceOutput));
 
 	gulp.src(vendorJsSrcs)
-	.pipe(sourcemaps.init())
-	.pipe(concat('vendors.js'))
-	.pipe(uglify())
-	.pipe(sourcemaps.write('./'))
-	.pipe(gulp.dest(vendorsResourceOutput));
+		.pipe(sourcemaps.init())
+		.pipe(concat('vendors.js'))
+		.pipe(uglify())
+		.pipe(sourcemaps.write('./'))
+		.pipe(gulp.dest(vendorsResourceOutput));
 
 	gulp.src(vendorIeJsSrcs)
-	.pipe(sourcemaps.init())
-	.pipe(concat('ie-vendors.js'))
-	.pipe(uglify())
-	.pipe(sourcemaps.write('./'))
-	.pipe(gulp.dest(vendorsResourceOutput));
+		.pipe(sourcemaps.init())
+		.pipe(concat('ie-vendors.js'))
+		.pipe(uglify())
+		.pipe(sourcemaps.write('./'))
+		.pipe(gulp.dest(vendorsResourceOutput));
+});
+
+gulp.task('clean-dist-render', function() {
+	return del(nunjucksRenderDestination+'**/*');
 });
 
 gulp.task('nunjucks', ['clean-dist-render'], function() {
 	nunjucksRender.nunjucks.configure([nunjucksTemplateSource], {watch: false});
 
 	return gulp.src(nunjucksViewSource)
-	.pipe(data(getDataForFile))
-	.pipe(nunjucksRender({basePath:distBasePath}))
-	.pipe(gulp.dest(nunjucksRenderDestination));
-});
-
-gulp.task('clean-dist-render', function() {
-	return del(nunjucksRenderDestination+'**/*');
+		  .pipe(data(getDataForFile))
+		  .pipe(nunjucksRender({basePath:distBasePath}))
+		  .pipe(gulp.dest(nunjucksRenderDestination));
 });
 
 gulp.task('clean-dist-images', function() {

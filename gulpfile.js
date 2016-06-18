@@ -20,10 +20,12 @@ var   nunjucksTemplateSource		= 'src/views/'
 	, srcResources					= 'src/resources/'
 	, srcSassStyle					= srcResources+'/sass/main.scss'
 	, fontsSource					= srcResources+'/fonts/**/*'
+	, jsSource						= srcResources+'/js/main.js'
 	, nunjucksRenderDestination		= 'dist/render/'
 	, imagesDestination				= 'dist/images/'
 	, assetsDestination				= 'dist/assets/'
 	, vendorsResourceOutput			= assetsDestination+'vendors/'
+	, jsOutput						= assetsDestination+'js/'
 	, sassResourceOutput			= assetsDestination+'css/'
 	, fontsOutput					= assetsDestination+'fonts/'
 ;
@@ -69,6 +71,7 @@ gulp.task('watch', function() {
 	gulp.watch([imagesSource], ['imagemin']);
 	gulp.watch([srcSassStyle], ['sass']);
 	gulp.watch([fontsSource], ['fonts']);
+	gulp.watch([jsSource], ['js']);
 });
 
 gulp.task('clean-dist-vendors', function() {
@@ -131,4 +134,12 @@ gulp.task('sass', function () {
 gulp.task('fonts', function () {
 	return gulp.src([fontsSource])
 		  .pipe(gulp.dest(fontsOutput));
+});
+
+gulp.task('js', function () {
+	return gulp.src([jsSource])
+		  .pipe(sourcemaps.init())
+		  .pipe(uglify())
+		  .pipe(sourcemaps.write('./'))
+		  .pipe(gulp.dest(jsOutput));
 });

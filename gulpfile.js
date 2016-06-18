@@ -63,7 +63,7 @@ function getDataForFile(file) {
 	return null;
 }
 
-gulp.task('default', ['watch']);
+gulp.task('default', ['vendors', 'nunjucks', 'imagemin', 'sass', 'fonts', 'js']);
 
 gulp.task('watch', function() {
 	gulp.watch(vendorMixJsSrcs.concat(vendorSeparateJsSrcs.concat(vendorSeparateCssSrcs)), ['vendors']);

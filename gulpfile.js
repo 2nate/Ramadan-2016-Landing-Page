@@ -69,7 +69,7 @@ gulp.task('watch', function() {
 	gulp.watch(vendorMixJsSrcs.concat(vendorSeparateJsSrcs.concat(vendorSeparateCssSrcs)), ['vendors']);
 	gulp.watch([nunjucksViewSource, nunjucksTemplateSource+'**/*', nunjucksDataSource], ['nunjucks']);
 	gulp.watch([imagesSource], ['imagemin']);
-	gulp.watch([srcSassStyle], ['sass']);
+	gulp.watch([srcResources+'/sass/**/*'], ['sass']);
 	gulp.watch([fontsSource], ['fonts']);
 	gulp.watch([jsSource], ['js']);
 });
